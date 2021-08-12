@@ -57,6 +57,10 @@ if [ "$1" = 'redis-cluster' ]; then
 
       if [ "$port" -lt "$first_standalone" ]; then
         PORT=${port} BIND_ADDRESS=${BIND_ADDRESS} envsubst < /redis-conf/redis-cluster.tmpl > /redis-conf/${port}/redis.conf
+        if [ ! -z "$CLUSTER_ANNOUNCE_IP" ]; then
+          echo "cluster-announce-ip ${CLUSTER_ANNOUNCE_IP}" >> /redis-conf/${port}/redis.conf
+        fi
+        
         nodes="$nodes $IP:$port"
       else
         PORT=${port} BIND_ADDRESS=${BIND_ADDRESS} envsubst < /redis-conf/redis.tmpl > /redis-conf/${port}/redis.conf
